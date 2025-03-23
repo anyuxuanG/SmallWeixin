@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/compress/compress",
+    "pages/matting/matting",
+    "pages/recognition/recognition",
+    "pages/idphoto/idphoto"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f8f8f8",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "图片处理工具"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

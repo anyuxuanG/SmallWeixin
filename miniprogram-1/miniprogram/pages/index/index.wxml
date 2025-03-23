@@ -1,0 +1,42 @@
+<view class="container">
+  <view class="page-content">
+    <view class="header">
+      <text class="title">图片综合处理</text>
+      <text class="subtitle">一站式图片处理解决方案</text>
+    </view>
+    
+    <view class="grid">
+      <navigator url="../compress/compress" class="grid-item">
+        <view class="icon-wrapper compress">
+          <icon type="download" size="28" color="#ffffff" class="grid-icon"></icon>
+        </view>
+        <text class="grid-text">图片压缩</text>
+        <text class="grid-desc">减小图片体积</text>
+      </navigator>
+      
+      <navigator url="../matting/matting" class="grid-item">
+        <view class="icon-wrapper matting">
+          <icon type="album" size="28" color="#ffffff" class="grid-icon"></icon>
+        </view>
+        <text class="grid-text">抠图去背景</text>
+        <text class="grid-desc">一键抠图去除背景</text>
+      </navigator>
+      
+      <navigator url="../recognition/recognition" class="grid-item">
+        <view class="icon-wrapper recognition">
+          <icon type="search" size="28" color="#ffffff" class="grid-icon"></icon>
+        </view>
+        <text class="grid-text">图片识别</text>
+        <text class="grid-desc">智能识别图片内容</text>
+      </navigator>
+      
+      <navigator url="../idphoto/idphoto" class="grid-item">
+        <view class="icon-wrapper idphoto">
+          <icon type="camera" size="28" color="#ffffff" class="grid-icon"></icon>
+        </view>
+        <text class="grid-text">证件照制作</text>
+        <text class="grid-desc">快速制作标准证件照</text>
+      </navigator>
+    </view>
+  </view>
+</view>

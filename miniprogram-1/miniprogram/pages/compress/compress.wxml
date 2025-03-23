@@ -1,0 +1,46 @@
+<view class="container">
+  <view class="page-content">
+    <view class="preview-area">
+      <image class="preview-image" src="{{imagePath || '/images/compress.png'}}" mode="aspectFit"></image>
+      
+      <!-- 压缩进度遮罩 -->
+      <view class="compression-progress" wx:if="{{isCompressing}}">
+        <view class="progress-value">压缩中 {{compressionProgress}}%</view>
+        <view class="progress-bar">
+          <view class="progress-inner" style="width: {{compressionProgress}}%;"></view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 成功提示 -->
+    <view class="success-message" wx:if="{{showSuccessMessage}}">
+      <view class="success-icon">✓</view>
+      <view class="success-text">
+        <view>恭喜您，压缩成功！</view>
+        <view class="size-info">原始大小: {{originalSize}}KB → 压缩后: {{compressedSize}}KB</view>
+        <view class="size-info">压缩率: {{compressionRate}}%</view>
+      </view>
+      <view class="success-tips">请点击"保存图片"按钮保存</view>
+      <view class="close-btn" bindtap="closeSuccessMessage">×</view>
+    </view>
+    
+    <view class="compress-controls">
+      <view class="slider-header">
+        <text class="slider-label">压缩强度：{{compressionRatio}}%</text>
+        <text class="size-text" wx:if="{{originalSize != '0'}}">原始大小: {{originalSize}}KB</text>
+      </view>
+      <view class="slider-tips">
+        <text class="left-tip">更小</text>
+        <text class="right-tip">更清晰</text>
+      </view>
+      <slider bindchange="onCompressionChange" min="1" max="99" value="{{compressionRatio}}" show-value="{{false}}" activeColor="#42b983"/>
+    </view>
+    
+    <view class="button-group">
+      <button class="primary-btn" bindtap="chooseImage">上传图片</button>
+      <button class="primary-btn" bindtap="saveImage" disabled="{{!compressedImagePath || isCompressing}}">
+        {{isCompressing ? '压缩中...' : '保存图片'}}
+      </button>
+    </view>
+  </view>
+</view>

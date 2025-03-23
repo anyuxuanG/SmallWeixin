@@ -1,0 +1,213 @@
+<view class="container">
+  <view class="page-content">
+    <!-- 步骤指示器 -->
+    <view class="step-indicator">
+      <view class="step {{currentStep >= 1 ? 'active' : ''}}" bindtap="goToStep" data-step="1">
+        <view class="step-number">1</view>
+        <view class="step-name">选择规格</view>
+      </view>
+      <view class="step-line {{currentStep >= 2 ? 'active' : ''}}"></view>
+      <view class="step {{currentStep >= 2 ? 'active' : ''}}" bindtap="goToStep" data-step="2">
+        <view class="step-number">2</view>
+        <view class="step-name">上传照片</view>
+      </view>
+      <view class="step-line {{currentStep >= 3 ? 'active' : ''}}"></view>
+      <view class="step {{currentStep >= 3 ? 'active' : ''}}" bindtap="goToStep" data-step="3">
+        <view class="step-number">3</view>
+        <view class="step-name">完成</view>
+      </view>
+    </view>
+
+    <!-- 步骤1：选择规格和背景色 -->
+    <view class="step-content" hidden="{{currentStep != 1}}">
+      <view class="step-title">选择证件照规格和背景色</view>
+      
+      <view class="specs-container">
+        <view class="spec-card {{currentSpec === 'one' ? 'active' : ''}}" bindtap="selectSpec" data-spec="one">
+          <view class="spec-preview" style="background-color: {{currentBgColorCode}}">
+            <view class="spec-size-demo one-inch"></view>
+          </view>
+          <view class="spec-info">
+            <view class="spec-name">一寸照片</view>
+            <view class="spec-size">25×35mm</view>
+          </view>
+          <view class="selected-icon" wx:if="{{currentSpec === 'one'}}">✓</view>
+        </view>
+        
+        <view class="spec-card {{currentSpec === 'two' ? 'active' : ''}}" bindtap="selectSpec" data-spec="two">
+          <view class="spec-preview" style="background-color: {{currentBgColorCode}}">
+            <view class="spec-size-demo two-inch"></view>
+          </view>
+          <view class="spec-info">
+            <view class="spec-name">二寸照片</view>
+            <view class="spec-size">35×49mm</view>
+          </view>
+          <view class="selected-icon" wx:if="{{currentSpec === 'two'}}">✓</view>
+        </view>
+        
+        <view class="spec-card {{currentSpec === 'passport' ? 'active' : ''}}" bindtap="selectSpec" data-spec="passport">
+          <view class="spec-preview" style="background-color: {{currentBgColorCode}}">
+            <view class="spec-size-demo passport"></view>
+          </view>
+          <view class="spec-info">
+            <view class="spec-name">护照照片</view>
+            <view class="spec-size">33×48mm</view>
+          </view>
+          <view class="selected-icon" wx:if="{{currentSpec === 'passport'}}">✓</view>
+        </view>
+      </view>
+      
+      <view class="colors-title">选择背景颜色</view>
+      <view class="colors-container">
+        <view class="color-card {{bgColor === 'white' ? 'active' : ''}}" bindtap="selectColor" data-color="white">
+          <view class="color-preview" style="background-color: #ffffff"></view>
+          <view class="color-name">白色</view>
+          <view class="selected-icon" wx:if="{{bgColor === 'white'}}">✓</view>
+        </view>
+        
+        <view class="color-card {{bgColor === 'blue' ? 'active' : ''}}" bindtap="selectColor" data-color="blue">
+          <view class="color-preview" style="background-color: #2f7fdf"></view>
+          <view class="color-name">蓝色</view>
+          <view class="selected-icon" wx:if="{{bgColor === 'blue'}}">✓</view>
+        </view>
+        
+        <view class="color-card {{bgColor === 'red' ? 'active' : ''}}" bindtap="selectColor" data-color="red">
+          <view class="color-preview" style="background-color: #e74c3c"></view>
+          <view class="color-name">红色</view>
+          <view class="selected-icon" wx:if="{{bgColor === 'red'}}">✓</view>
+        </view>
+        
+        <view class="color-card {{bgColor === 'gray' ? 'active' : ''}}" bindtap="selectColor" data-color="gray">
+          <view class="color-preview" style="background-color: #bdc3c7"></view>
+          <view class="color-name">灰色</view>
+          <view class="selected-icon" wx:if="{{bgColor === 'gray'}}">✓</view>
+        </view>
+      </view>
+      
+      <view class="button-container">
+        <button class="primary-btn next-btn" bindtap="nextStep">下一步</button>
+      </view>
+    </view>
+    
+    <!-- 步骤2：上传和处理照片 -->
+    <view class="step-content" hidden="{{currentStep != 2}}">
+      <view class="step-title">上传并处理照片</view>
+      
+      <view class="upload-area" wx:if="{{!imagePath}}" bindtap="chooseImage">
+        <view class="upload-icon"></view>
+        <view class="upload-text">点击上传照片</view>
+        <view class="upload-tips">请选择清晰的正面免冠照片</view>
+      </view>
+      
+      <!-- 正常预览区域 -->
+      <view class="preview-area" wx:elif="{{!isCropping}}">
+        <image class="preview-image" src="{{imagePath}}" mode="aspectFit"></image>
+        
+        <view class="photo-info">
+          <view class="spec-info-tag">
+            <text class="spec-tag">{{getSpecName(currentSpec)}}</text>
+            <text class="color-tag" style="background-color: {{currentBgColorCode}}"></text>
+          </view>
+          
+          <view class="photo-actions">
+            <view class="action-btn crop-action" bindtap="startCropping">裁剪</view>
+            <view class="action-btn reupload-action" bindtap="chooseImage">重新上传</view>
+          </view>
+        </view>
+        
+        <!-- 添加操作指南提示 -->
+        <view class="photo-guide">
+          <view class="guide-step">
+            <view class="guide-icon">1</view>
+            <view class="guide-text">调整照片位置和大小</view>
+          </view>
+          <view class="guide-step">
+            <view class="guide-icon">2</view>
+            <view class="guide-text">点击"生成证件照"按钮</view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 裁剪模式界面 -->
+      <view class="crop-container" wx:elif="{{isCropping}}">
+        <view class="crop-area">
+          <movable-area class="movable-area">
+            <movable-view class="movable-view" direction="all" scale="true" scale-min="0.5" scale-max="4" scale-value="{{scaleValue}}" x="{{imageX}}" y="{{imageY}}" bindscale="onScaleImage" bindchange="onMoveImage">
+              <image class="crop-image" src="{{imagePath}}" mode="widthFix"></image>
+            </movable-view>
+            <!-- 裁剪框 -->
+            <view class="crop-box" style="width: {{cropBoxWidth}}px; height: {{cropBoxHeight}}px; top: {{cropBoxTop}}px; left: {{cropBoxLeft}}px;">
+              <view class="crop-corner top-left"></view>
+              <view class="crop-corner top-right"></view>
+              <view class="crop-corner bottom-left"></view>
+              <view class="crop-corner bottom-right"></view>
+            </view>
+          </movable-area>
+          
+          <view class="crop-tools">
+            <view class="crop-size-text">{{getSpecName(currentSpec)}}</view>
+            <view class="crop-guide-text">拖动并缩放照片以调整位置</view>
+            <view class="crop-btn-group">
+              <button class="crop-btn cancel" bindtap="cancelCrop">取消</button>
+              <button class="crop-btn confirm" bindtap="confirmCrop">确认</button>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="button-container" wx:if="{{!isCropping}}">
+        <button class="secondary-btn back-btn" bindtap="prevStep">上一步</button>
+        <button class="primary-btn process-btn" bindtap="processPhoto" disabled="{{!imagePath}}">生成证件照</button>
+      </view>
+    </view>
+    
+    <!-- 步骤3：完成和保存 -->
+    <view class="step-content" hidden="{{currentStep != 3}}">
+      <view class="step-title">证件照已生成完成</view>
+      
+      <view class="result-area">
+        <view class="result-container" style="background-color: {{currentBgColorCode}}">
+          <image class="result-image" src="{{processedImagePath}}" mode="aspectFit"></image>
+        </view>
+        
+        <view class="result-info">
+          <view class="result-spec">
+            <text class="spec-name">{{getSpecName(currentSpec)}}</text>
+            <text class="color-name">({{bgColor === 'white' ? '白底' : bgColor === 'blue' ? '蓝底' : bgColor === 'red' ? '红底' : '灰底'}})</text>
+          </view>
+          <view class="result-tips">{{result_tips || '证件照已自动保存至相册'}}</view>
+        </view>
+      </view>
+      
+      <view class="action-buttons">
+        <button class="action-btn save-btn" bindtap="saveToAlbum">
+          <view class="action-icon save-icon"></view>
+          <text>保存到相册</text>
+        </button>
+        
+        <button class="action-btn new-btn" bindtap="startOver">
+          <view class="action-icon new-icon"></view>
+          <text>重新制作</text>
+        </button>
+      </view>
+      
+      <view class="button-container">
+        <button class="primary-btn home-btn" bindtap="goToHome">返回首页</button>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 处理进度弹窗 -->
+  <view class="processing-modal" wx:if="{{isProcessing}}">
+    <view class="processing-content">
+      <view class="processing-status">{{processingStatus}}</view>
+      <view class="processing-bar">
+        <view class="processing-progress" style="width: {{processingProgress}}%"></view>
+      </view>
+      <view class="processing-percent">{{processingProgress}}%</view>
+    </view>
+  </view>
+  
+  <!-- 隐藏的Canvas用于图像处理 -->
+  <canvas type="2d" id="idPhotoCanvas" style="position: absolute; visibility: hidden; width: 300px; height: 400px;"></canvas>
+</view>

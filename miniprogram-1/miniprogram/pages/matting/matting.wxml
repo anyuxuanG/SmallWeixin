@@ -1,0 +1,34 @@
+<view class="container">
+  <view class="page-content">
+    <view class="preview-area">
+      <image class="preview-image" src="{{showOriginal ? imagePath : (mattedImagePath || imagePath || '/images/matting.png')}}" mode="aspectFit"></image>
+      
+      <!-- 处理进度遮罩 -->
+      <view class="processing-overlay" wx:if="{{isProcessing}}">
+        <view class="progress-value">处理中 {{processingProgress}}%</view>
+        <view class="progress-bar">
+          <view class="progress-inner" style="width: {{processingProgress}}%;"></view>
+        </view>
+      </view>
+      
+      <!-- 对比图标 -->
+      <view class="compare-button" wx:if="{{mattedImagePath && !isProcessing}}" bindtap="toggleImageView">
+        <text>{{showOriginal ? '查看结果' : '查看原图'}}</text>
+      </view>
+    </view>
+    
+    <view class="action-area">
+      <view class="tips">
+        <text class="tips-text">上传图片后，点击"开始抠图"按钮，AI将自动识别主体并去除背景</text>
+      </view>
+      
+      <view class="button-group">
+        <button class="primary-btn" bindtap="chooseImage">上传图片</button>
+        <button class="primary-btn process-btn" bindtap="processMattingImage" disabled="{{!imagePath || isProcessing}}">
+          {{isProcessing ? '处理中...' : '开始抠图'}}
+        </button>
+        <button class="primary-btn save-btn" bindtap="saveImage" disabled="{{!mattedImagePath}}">保存图片</button>
+      </view>
+    </view>
+  </view>
+</view>

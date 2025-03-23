@@ -1,0 +1,51 @@
+<view class="container">
+  <view class="page-content">
+    <view class="preview-area">
+      <image class="preview-image" src="{{imagePath || '/images/recognition.png'}}" mode="aspectFit"></image>
+      
+      <!-- 处理进度遮罩 -->
+      <view class="processing-overlay" wx:if="{{isRecognizing}}">
+        <view class="progress-value">{{processingProgress}}%</view>
+        <view class="progress-bar">
+          <view class="progress-inner" style="width: {{processingProgress}}%;"></view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="section-title">识别类型</view>
+    <view class="recognition-types">
+      <view class="recognition-type {{recognitionType === 'general' ? 'active' : ''}}" bindtap="setRecognitionType" data-type="general">
+        <view class="type-icon general-icon"></view>
+        <text>通用物体</text>
+      </view>
+      <view class="recognition-type {{recognitionType === 'ocr' ? 'active' : ''}}" bindtap="setRecognitionType" data-type="ocr">
+        <view class="type-icon ocr-icon"></view>
+        <text>文字识别</text>
+      </view>
+      <view class="recognition-type {{recognitionType === 'plant' ? 'active' : ''}}" bindtap="setRecognitionType" data-type="plant">
+        <view class="type-icon plant-icon"></view>
+        <text>植物识别</text>
+      </view>
+    </view>
+    
+    <view class="result-area" wx:if="{{apiResponse}}">
+      <view class="section-title">识别结果</view>
+      <scroll-view scroll-y class="api-response">
+        <text space="ensp" decode>{{apiResponse}}</text>
+      </scroll-view>
+    </view>
+    
+    <view class="error-area" wx:if="{{errorMessage}}">
+      <view class="error-message">{{errorMessage}}</view>
+    </view>
+    
+    <view class="action-area">
+      <view class="button-group">
+        <button class="primary-btn" bindtap="chooseImage">上传图片</button>
+        <button class="primary-btn" bindtap="startRecognition" disabled="{{!imagePath || isRecognizing}}">
+          {{isRecognizing ? '识别中...' : '开始识别'}}
+        </button>
+      </view>
+    </view>
+  </view>
+</view> 
